@@ -1,4 +1,4 @@
-name: 빌드 및 배포
+name: 빌드 및 배포 
 
 on:
   push:
@@ -10,18 +10,34 @@ jobs:
     steps:
       - name: 원격저장소에서 소스를 복사
         uses: actions/checkout@v3
-      - name: 소스파일을 docker image로 build
-        run: docker build -t thedeny1106/my-fastapi-whoami:latest .
 
-      - name: docker hub에 로그인
-        run: docker login -u thedeny1106 -p ${{  secrets.DOCKER_PASSWORD  }}
+      - name: 소스파일을 docker이미지로 빌드한다
+        run: docker build -t masungil/my-fastapi-whoami:latest .
+      
+      - name: docker hub에 로그인을 한다
+        run: docker login -u masungil -p ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: 생성된 이미지를 docker hub에 push
-        run: docker push thedeny1106/my-fastapi-whoami:latest
+      - name: 생성된 이미지를 docker hub에 push 한다
+        run: docker push masungil/my-fastapi-whoami:latest
 
   deploy:
     needs: build-docker-image
     name: deploy
-    runs-on: ubuntu-latest
+    runs-on: [ self-hosted, label-kosa]
     steps:
-      - run: echo '이미지 배포 및 실행'
+      - name: 기존에 실행중인 서비스를 제거한다 
+        run: docker service rm my-fastapi-whoami-app
+
+      - name: docker hub에 로그인을 한다
+        run: docker login -u masungil -p ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: 생성된 이미지를 docker hub에 pull로 내려 받는다
+        run: docker pull masungil/my-fastapi-whoami:latest
+
+      - name: 서비스 실행
+        run: |
+          docker service create \
+                --name my-fastapi-whoami-app \
+                --publish published=8000,target=8000 \
+                --replicas 3 \
+                masungil/my-fastapi-whoami:latest      
