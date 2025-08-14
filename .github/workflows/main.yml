@@ -18,7 +18,7 @@ jobs:
         run: docker login -u thedeny1106 -p ${{ secrets.DOCKER_PASSWORD }}
 
       - name: 생성된 이미지를 docker hub에 push 한다
-        run: docker push thedeny1106/my-fastapi-whoami:latest
+        run: docker push thedeny1106/my-fastapi-whoami
 
   deploy:
     needs: build-docker-image
@@ -32,7 +32,7 @@ jobs:
         run: docker login -u thedeny1106 -p ${{ secrets.DOCKER_PASSWORD }}
 
       - name: 생성된 이미지를 docker hub에 pull로 내려 받는다
-        run: docker pull thedeny1106/my-fastapi-whoami:latest
+        run: docker pull thedeny1106/my-fastapi-whoami
 
       - name: 서비스 실행
         run: |
@@ -40,4 +40,4 @@ jobs:
                 --name my-fastapi-whoami-app \
                 --publish published=8000,target=8000 \
                 --replicas 3 \
-                thedeny1106/my-fastapi-whoami:latest      
+                thedeny1106/my-fastapi-whoami
