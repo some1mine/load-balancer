@@ -8,6 +8,9 @@ jobs:
   build-docker-image:
     runs-on: ubuntu-latest
     steps:
+      - name: 원격저장소에서 소스를 목사
+        uses: actions/checkout@v3
+      
       - name: 이미지 빌드 단계
         run: |
           echo '이미지 빌드 1단계'
