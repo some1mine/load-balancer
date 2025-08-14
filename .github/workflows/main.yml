@@ -26,7 +26,7 @@ jobs:
     runs-on: [ self-hosted, label-kosa ]
     steps:
       - name: 기존에 실행중인 서비스를 제거한다 
-        run: docker service rm my-fastapi-whoami
+        run: docker service rm my-fastapi-whoami-app
 
       - name: docker hub에 로그인을 한다
         run: docker login -u thedeny1106 -p ${{ secrets.DOCKER_PASSWORD }}
