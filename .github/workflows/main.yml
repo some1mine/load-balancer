@@ -12,7 +12,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: 소스파일을 docker이미지로 빌드한다
-        run: docker build -t some1mine/my-fastapi-whoami:latest .
+        run: docker build -t thedeny1106/my-fastapi-whoami:latest .
       
       - name: docker hub에 로그인을 한다
         run: docker login -u thedeny1106 -p ${{ secrets.DOCKER_PASSWORD }}
